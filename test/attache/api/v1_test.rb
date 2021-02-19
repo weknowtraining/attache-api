@@ -22,7 +22,7 @@ class Attache::API::TestV1 < Minitest::Test
     current_value = ['{"key": "value"}']
     modifiers = { placeholder: rand.to_s, data: { key: "value" }, auth_options: false }
 
-    options = attache_options(geometry, current_value, modifiers)
+    options = attache_options(geometry, current_value, **modifiers)
 
     assert_equal Hash({
       data: {

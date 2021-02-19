@@ -1,8 +1,8 @@
 module Attache
   module API
     module Model
-      def attache_field_options(attr_value, geometry, options = {})
-        V1.attache_options(geometry, attache_field_attributes(attr_value, geometry), options)
+      def attache_field_options(attr_value, geometry, **options)
+        V1.attache_options(geometry, attache_field_attributes(attr_value, geometry), **options)
       end
 
       def attache_field_urls(attr_value, geometry)
@@ -25,7 +25,7 @@ module Attache
       end
 
       def attache_field_set(array)
-        new_value = Utils.array(array).inject([]) {|sum,value|
+        new_value = Utils.array(array).inject([]) do |sum,value|
           hash = value.respond_to?(:read) && V1.attache_upload(value) || value
           hash = JSON.parse(hash.to_s) rescue Hash(error: $!) unless hash.kind_of?(Hash)
           okay = hash.respond_to?(:[]) && (hash['path'] || hash[:path])
@@ -39,7 +39,7 @@ module Attache
             end
           end
           okay ? sum + [hash] : sum
-        }
+        end
         Utils.array(new_value)
       end
 
@@ -51,14 +51,14 @@ module Attache
       end
 
       def attaches_discard!(files)
-        files.reject! {|x| x.nil? || x == "" }
+        files.reject! { |x| x.nil? || x == "" }
         V1.attache_delete(*files.uniq) unless files.empty?
       rescue Exception
         raise if ENV['ATTACHE_DISCARD_FAILURE_RAISE_ERROR']
       end
 
       def attaches_backup!(files)
-        files.reject! {|x| x.nil? || x == "" }
+        files.reject! { |x| x.nil? || x == "" }
         V1.attache_backup(*files.uniq) unless files.empty?
       end
     end

@@ -27,7 +27,7 @@ class Attache::API::TestModel < Minitest::Test
       }), attache_field_options(
         { "path" => "dirname456/value789" },
         "geometry123",
-        { placeholder: "placeholder", data: { key: "value789" }, auth_options: false }
+        placeholder: "placeholder", data: { key: "value789" }, auth_options: false
       )
     end
   end
